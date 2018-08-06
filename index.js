@@ -21,7 +21,7 @@ class DelDevAssets {
 						input: fRead,
 					})
 					var str = "";
-					objReadline.on('line', line => {
+					objReadline.on("line", line => {
 						var tmp = line;
 						var hasAssets = false;
 						this.delNames.map(item => {
@@ -35,7 +35,7 @@ class DelDevAssets {
 						}
 					});
 				
-					objReadline.on('close', ()=> {
+					objReadline.on("close", ()=> {
 						var fWrite = fs.createWriteStream(fileName);
 						fWrite.write(str);			
 					});
