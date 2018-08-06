@@ -21,7 +21,7 @@ class DelDevAssets {
 						input: fRead,
 					})
 					var str = "";
-					objReadline.on('line', (line)=>{
+					objReadline.on('line', line => {
 						var tmp = line;
 						var hasAssets = false;
 						this.delNames.map(item => {
