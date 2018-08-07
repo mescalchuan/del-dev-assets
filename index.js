@@ -1,7 +1,7 @@
-var readline = require("readline");
-var fs = require("fs");
-var os = require("os");
-var path = require("path");
+const readline = require("readline");
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
 
 class DelDevAssets {
 	constructor(options) {
@@ -11,37 +11,34 @@ class DelDevAssets {
 	}
 	apply(compiler) {
 		compiler.plugin("done", stats => {
-			var files = fs.readdirSync(this.outputPath);
+			const files = fs.readdirSync(this.outputPath);
 			files.forEach(chunkName => {	
-				var stats = fs.statSync(path.join(this.outputPath, chunkName));
+				const stats = fs.statSync(path.join(this.outputPath, chunkName));
 				if(stats.isDirectory()) {
-					var fileName = path.join(this.outputPath, chunkName, this.htmlName);
-		 			var fRead = fs.createReadStream(fileName);
-					var objReadline = readline.createInterface({
+					const fileName = path.join(this.outputPath, chunkName, this.htmlName);
+		 			const fRead = fs.createReadStream(fileName);
+					const objReadline = readline.createInterface({
 						input: fRead,
 					})
-					var str = "";
+					let str = "";
 					objReadline.on("line", line => {
-						var tmp = line;
-						var hasAssets = false;
+						let hasAssets = false;
 						this.delNames.map(item => {
-							if(!!(~tmp.indexOf(item))) {
+							if(!!(~line.indexOf(item))) {
 								hasAssets = true;
 							}
 						})
 						if(!hasAssets) {
-							//fWrite.write(tmp + os.EOL); // 下一行
-							str += tmp + os.EOL;
+							str += line + os.EOL;
 						}
 					});
 				
-					objReadline.on("close", ()=> {
-						var fWrite = fs.createWriteStream(fileName);
+					objReadline.on("close", () => {
+						const fWrite = fs.createWriteStream(fileName);
 						fWrite.write(str);			
 					});
 				}
 			})
-			
 		});
 		compiler.plugin("failed", error => {
 			console.error("build error!");
